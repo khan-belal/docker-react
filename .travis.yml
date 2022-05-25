@@ -1,6 +1,7 @@
 language: ruby
 os: linux
-sudo: required
+dist: xenial
+sudo: true
 services:
   - docker
 
@@ -9,3 +10,16 @@ before_install:
 
 script:
   - docker run -e CI=true belalkhan/docker-react npm run test
+
+deploy:
+  provider: elasticbeanstalk
+  region: "us-east-1"
+  app: docker-test
+  env: "Docker-env"
+  bucket_name: ""
+  bucket_path: "docker-test"
+  on:
+    branch: master
+  access_key_id: $AWS_ACCESS_KEY
+  secret_access_key:
+    secure: "$AWS_SECRET_KEY"
